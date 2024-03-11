@@ -30,3 +30,4 @@ class Review(models.Model):
     text = models.TextField()
     mark = models.PositiveSmallIntegerField(choices=MARK_CHOICES)
     created_at = models.DateTimeField(auto_now_add=True)
+    
