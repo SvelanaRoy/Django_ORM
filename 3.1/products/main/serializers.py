@@ -15,9 +15,22 @@ class ProductListSerializer(serializers.ModelSerializer):
         fields = ['title', 'price']
 
 
-class ProductDetailsSerializer(serializers.ModelSerializer):
-    reviews = ReviewSerializer(many=True, read_only=True)
+#class ProductDetailsSerializer(serializers.ModelSerializer):
+    #reviews = ReviewSerializer(many=True, read_only=True)
     
+    #class Meta:
+        #model = Product
+        #fields = ['title', 'description','price','reviews']
+        
+class ProductDetailsSerializer(serializers.ModelSerializer):
+
     class Meta:
         model = Product
-        fields = ['title', 'description','price','reviews']
+        fields = ['title', 'price', 'description']
+        
+    def to_representation(self, instance):
+        representation = super().to_representation(instance)
+        representation['reviews'] = list(
+            [ReviewSerializer(rew).data for rew in Review.objects.filter(product=instance)]
+        )
+        return representation        
